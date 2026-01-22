@@ -15,6 +15,11 @@ import os
 import uuid
 import traceback
 import stripe
+
+# Stripe configuration (ENV based)
+STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY")
+stripe.api_key = STRIPE_SECRET_KEY
+
 import sqlite3
 import datetime
 from urllib.parse import urlparse, parse_qs, urlencode, urlunparse
@@ -1415,7 +1420,7 @@ google = oauth.register(
 )
 
 ######################## STRIPE PAYMENT ########################
-stripe.api_key = "sk_test_51SWxcx3FrGPVy3Ub2SC96WVgzEB5pKZMvDKupBfmtpHRlxAM1H5m9NLUmwR0m9Ks3Cm9ILlTYbbXrz8sHjLUrOO200jGhBTorx"       # Your Stripe secret key
+       # Your Stripe secret key
 DOMAIN = "https://audio2text.mlopssol.com"      # Production domain
 
 @app.post("/create-checkout-session")
@@ -1461,7 +1466,7 @@ async def create_checkout_session_3dollar(request: Request):
 async def create_checkout_session_3inr(request: Request):
     domain = str(request.base_url).rstrip('/')
     import stripe
-    stripe.api_key = "sk_test_51SWxcx3FrGPVy3Ub2SC96WVgzEB5pKZMvDKupBfmtpHRlxAM1H5m9NLUmwR0m9Ks3Cm9ILlTYbbXrz8sHjLUrOO200jGhBTorx"
+    
     try:
         session = stripe.checkout.Session.create(
             payment_method_types=["card"],
@@ -1481,7 +1486,7 @@ async def create_checkout_session_3inr(request: Request):
 async def create_checkout_session_3dollar_yearly(request: Request):
     domain = str(request.base_url).rstrip('/')
     import stripe
-    stripe.api_key = "sk_test_51SWxcx3FrGPVy3Ub2SC96WVgzEB5pKZMvDKupBfmtpHRlxAM1H5m9NLUmwR0m9Ks3Cm9ILlTYbbXrz8sHjLUrOO200jGhBTorx"
+    
     try:
         session = stripe.checkout.Session.create(
             payment_method_types=["card"],
@@ -1501,7 +1506,7 @@ async def create_checkout_session_3dollar_yearly(request: Request):
 async def create_checkout_session_3inr_yearly(request: Request):
     domain = str(request.base_url).rstrip('/')
     import stripe
-    stripe.api_key = "sk_test_51SWxcx3FrGPVy3Ub2SC96WVgzEB5pKZMvDKupBfmtpHRlxAM1H5m9NLUmwR0m9Ks3Cm9ILlTYbbXrz8sHjLUrOO200jGhBTorx"
+    
     try:
         session = stripe.checkout.Session.create(
             payment_method_types=["card"],
