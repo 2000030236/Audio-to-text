@@ -40,8 +40,8 @@ logging.basicConfig(
     force=True
 )
 
-MAIN_WHISPER_URL = "ws://97.99.18.159:9002/"
-BACKUP_WHISPER_URL = "ws://97.99.18.159:9003/"
+MAIN_WHISPER_URL = ""
+BACKUP_WHISPER_URL = ""
 
 
 DB_PATH = os.path.join(os.path.dirname(__file__), "users.db")
