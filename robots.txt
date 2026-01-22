@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /login/
+Disallow: /auth/
+Disallow: /payment-success
+Disallow: /payment-cancel
+
+Sitemap: https://audio2text.mlopssol.com/sitemap.xml

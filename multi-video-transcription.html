@@ -1,0 +1,1810 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico?v=1">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1">
+    <title>Batch Video Transcription | Multi-Video Speech to Text</title>
+    <meta name="description"
+        content="Transcribe multiple videos simultaneously with our AI-powered batch transcription tool. Fast, accurate, and secure processing for large-scale content transcription needs.">
+    <meta name="keywords"
+        content="batch transcription, multiple video to text, bulk speech to text, automated video transcription, ai video processing">
+    <link rel="canonical" href="https://audio2text.mlopssol.com/multi-video-transcription">
+    <link rel="amphtml" href="https://audio2text.mlopssol.com/amp/multi-video-transcription">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://audio2text.mlopssol.com/multi-video-transcription">
+    <meta property="og:title" content="Batch Video Transcription | Multi-Video Speech to Text">
+    <meta property="og:description"
+        content="Scale your video-to-text workflows. Transcribe multiple videos at once with professional-grade accuracy and speed.">
+    <meta property="og:image" content="https://yourdomain.com/static/og-image.jpg">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://audio2text.mlopssol.com/multi-video-transcription">
+    <meta property="twitter:title" content="Batch Video Transcription | Multi-Video Speech to Text">
+    <meta property="twitter:description"
+        content="Scale your video-to-text workflows. Transcribe multiple videos at once with professional-grade accuracy and speed.">
+    <meta property="twitter:image" content="https://yourdomain.com/static/og-image.jpg">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <script src="https://js.stripe.com/v3/"></script>
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7297475514195167"
+        crossorigin="anonymous"></script>
+
+    <style>
+        html,
+        body {
+            height: 100vh;
+            width: 100vw;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            height: 100vh;
+            width: 100vw;
+            background: #f3f4f6;
+            color: #111827;
+            overflow: hidden;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* === CORE LAYOUT === */
+
+        body.style-1 {
+            background: #f3f4f6;
+        }
+
+        .app-root {
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            min-width: 0;
+            min-height: 0;
+        }
+
+        .logo-text {
+            font-weight: 700;
+            font-size: 1.1rem;
+            letter-spacing: 0.03em;
+            display: inline-flex;
+            align-items: center;
+            gap: .45rem;
+        }
+
+        .btn-primary {
+            border-radius: .6rem;
+            border: none;
+            padding: .65rem 1.2rem;
+            background: linear-gradient(135deg, #4f46e5, #6366f1);
+            color: #fff;
+            font-weight: 600;
+            font-size: .95rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: .45rem;
+            box-shadow: 0 10px 15px -3px rgba(79, 70, 229, .25);
+            transition: transform .15s ease, box-shadow .15s ease, opacity .15s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 20px 25px -5px rgba(79, 70, 229, .25);
+            opacity: .95;
+        }
+
+        .btn-ghost {
+            border-radius: .6rem;
+            border: 1px solid #e5e7eb;
+            background: #fff;
+            padding: .55rem 1rem;
+            cursor: pointer;
+            font-size: .9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: .35rem;
+            color: #374151;
+        }
+
+        .input,
+        .textarea {
+            width: 100%;
+            border-radius: .6rem;
+            border: 1.5px solid #c7d2fe;
+            padding: .7rem .9rem;
+            font-size: .9rem;
+            background: #f8fafc;
+            transition: border 0.2s;
+            font-family: inherit;
+        }
+
+        .textarea {
+            height: 180px;
+            resize: vertical;
+        }
+
+        .input:focus,
+        .textarea:focus {
+            outline: none;
+            border: 1.5px solid #6366f1;
+            background: #fff;
+        }
+
+        .field-label {
+            font-size: .82rem;
+            color: #4b5563;
+            font-weight: 500;
+            margin-bottom: .25rem;
+            display: flex;
+            align-items: center;
+            gap: .3rem;
+        }
+
+        .badge-soft {
+            display: inline-flex;
+            align-items: center;
+            gap: .25rem;
+            padding: .2rem .5rem;
+            border-radius: 999px;
+            background: #eef2ff;
+            color: #4f46e5;
+            font-size: .7rem;
+            font-weight: 600;
+        }
+
+        .chip {
+            padding: .25rem .6rem;
+            border-radius: 999px;
+            background: #f3f4ff;
+            font-size: .7rem;
+            color: #4b5563;
+        }
+
+        #result {
+            border-radius: .75rem;
+            border: 1px solid #e5e7eb;
+            background: #f9fafb;
+            padding: 0;
+            font-size: .85rem;
+            height: 500px;
+            overflow-y: auto;
+            line-height: 1.5;
+            color: #111827;
+            box-sizing: border-box;
+        }
+
+        .sidebar {
+            width: 230px;
+            background: #111827;
+            color: #e5e7eb;
+            padding: 1.2rem 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .sidebar .nav-section-title {
+            font-size: .75rem;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            color: #6b7280;
+            margin-bottom: .3rem;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: .15rem;
+            font-size: .86rem;
+        }
+
+        .sidebar li a {
+            display: flex;
+            align-items: center;
+            gap: .45rem;
+            padding: .45rem .6rem;
+            border-radius: .45rem;
+            color: #d1d5db;
+        }
+
+        .sidebar li a.active,
+        .sidebar li a:hover {
+            background: rgba(55, 65, 81, .8);
+            color: #fff;
+        }
+
+        .main-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            min-height: 0;
+            height: 100vh;
+            max-height: 100vh;
+        }
+
+        .topbar {
+            height: 60px;
+            border-bottom: 1px solid #e5e7eb;
+            background: #ffffffcc;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1.5rem;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: .75rem;
+            font-size: .82rem;
+            color: #4b5563;
+        }
+
+        .page-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.3rem 1.5rem;
+            min-width: 0;
+            min-height: 0;
+            display: grid;
+            height: 100%;
+            max-height: 100%;
+            gap: 1.25rem;
+            grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.2fr);
+        }
+
+        .card {
+            background: #fff;
+            border-radius: .9rem;
+            border: 1px solid #e5e7eb;
+            padding: 1.2rem 1.3rem;
+            box-shadow: 0 12px 30px -18px rgba(15, 23, 42, .35);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: .75rem;
+        }
+
+        h2.card-title {
+            font-size: 1.05rem;
+            font-weight: 600;
+        }
+
+        .helper-text {
+            font-size: .8rem;
+            color: #6b7280;
+            margin-bottom: .7rem;
+        }
+
+        /* ========== MOBILE RESPONSIVE STYLES ========== */
+
+        .mobile-menu-btn {
+            display: none;
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            z-index: 10002;
+            background: #6366f1;
+            color: white;
+            border: none;
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 10000;
+            backdrop-filter: blur(4px);
+        }
+
+        @media (max-width: 900px) {
+            .mobile-menu-btn {
+                display: flex;
+            }
+
+            .sidebar {
+                position: fixed;
+                left: -280px;
+                top: 0;
+                height: 100vh;
+                z-index: 10001;
+                transition: left 0.3s ease;
+                box-shadow: 4px 0 12px rgba(0, 0, 0, 0.1);
+            }
+
+            .sidebar.mobile-open {
+                left: 0;
+            }
+
+            .sidebar-overlay.active {
+                display: block;
+            }
+
+            .app-root {
+                flex-direction: column;
+            }
+
+            .main-panel {
+                width: 100%;
+            }
+
+            .page-content {
+                grid-template-columns: 1fr;
+                padding: 1rem;
+            }
+
+            .topbar {
+                padding-left: 65px;
+            }
+        }
+
+        @keyframes scaleIn {
+            0% {
+                transform: scale(0.95);
+                opacity: 0;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* --- TABS SYSTEM --- */
+        .tabs-container {
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.8rem;
+            overflow: hidden;
+            background: #fff;
+            margin-top: 20px;
+        }
+
+        .tabs-nav {
+            display: flex;
+            background: #f8fafc;
+            border-bottom: 1px solid #e5e7eb;
+            overflow-x: auto;
+        }
+
+        .tab-btn {
+            padding: 12px 16px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #64748b;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            white-space: nowrap;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .tab-btn:hover {
+            color: #1e293b;
+            background: #f1f5f9;
+        }
+
+        .tab-btn.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+            background: #fff;
+        }
+
+        .tab-content {
+            padding: 20px;
+            display: none;
+            max-height: 400px;
+            overflow-y: auto;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #334155;
+            white-space: pre-wrap;
+            text-align: left;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+
+<body class="style-1">
+
+    <!-- Mobile Menu Button -->
+    <button class="mobile-menu-btn" id="mobileMenuBtn" onclick="toggleMobileMenu()">
+        <i class="fa-solid fa-bars"></i>
+    </button>
+
+    <!-- Mobile Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeMobileMenu()"></div>
+
+    <div class="app-root">
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="logo-text" style="margin-bottom: 2rem;">
+                <a href="https://mlopssol.com/" target="_blank">
+                    <img src="/static/logo.png" alt="Speech-to-Text Pro - Batch Video Transcription"
+                        style="height:48px;max-width:180px;vertical-align:middle;">
+                </a>
+            </div>
+
+            <div>
+                <div class="nav-section-title">Workspace</div>
+                <ul>
+                    <li><a href="/"><i class="fa-solid fa-wave-square"></i><span>Speech to Text</span></a></li>
+                    <li><a href="/multi-video-transcription" class="active"><i
+                                class="fa-solid fa-list-check"></i><span>Batch
+                                Transcription</span></a></li>
+                </ul>
+            </div>
+
+            <div id="sharingSection">
+                <div class="nav-section-title">Sharing</div>
+                <ul>
+                    <li><a href="/bulk-results"><i class="fa-solid fa-share-nodes"></i><span>Share
+                                Results</span></a></li>
+                </ul>
+            </div>
+
+            <div>
+                <div class="nav-section-title">Discover MLOps</div>
+                <ul>
+                    <li><a href="https://www.mlopssol.com" target="_blank"><i class="fa-solid fa-rocket"
+                                style="color:#818cf8;"></i><span>Official Website</span></a></li>
+                </ul>
+            </div>
+
+            <div>
+                <div class="nav-section-title">Support</div>
+                <ul>
+                    <li><a href="/contact"><i class="fa-solid fa-envelope"
+                                style="color:#f472b6;"></i><span>Contact</span></a></li>
+                </ul>
+            </div>
+
+            <div>
+                <div class="nav-section-title">Account</div>
+                <ul>
+                    <li><a href="#" id="sidebarProfile"><i class="fa-solid fa-user"></i><span>Profile</span></a></li>
+                    <li><a href="/billing"><i class="fa-solid fa-credit-card"></i><span>Billing</span></a></li>
+                    <li id="historySidebarItem">
+                        <a href="#" id="sidebarHistory" style="justify-content:space-between;">
+                            <div style="display:flex;align-items:center;gap:.45rem;">
+                                <i class="fa-solid fa-clock-rotate-left"></i><span>History</span>
+                            </div>
+                            <i class="fa-solid fa-chevron-down"
+                                style="font-size:0.75rem;transition:transform 0.2s;"></i>
+                        </a>
+                        <ul id="historyList"
+                            style="display:none;flex-direction:column;gap:4px;margin-left:12px;border-left:1px solid #374151;padding-left:12px;margin-top:8px;max-height:220px;overflow-y:auto;overflow-x:hidden;">
+                        </ul>
+                    </li>
+                    <li><a href="#" id="sidebarAuth"><i class="fa-solid fa-arrow-right-to-bracket"
+                                id="authIcon"></i><span id="sidebarAuthText">Sign in</span></a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- MAIN PANEL -->
+        <div class="main-panel">
+            <header class="topbar">
+                <div style="display:flex;align-items:center;gap:.7rem;">
+                    <span class="badge-soft" id="workspaceType">Workspace</span>
+                    <span style="font-size:.82rem;color:#6b7280;">Batch Video Transcription</span>
+                </div>
+                <div class="topbar-right" id="profileBar">
+                    <span id="welcomeName"></span>
+                    <i class="fa-solid fa-user-circle" style="font-size:1.4rem;color:#6366f1;"></i>
+                </div>
+            </header>
+
+            <main class="page-content">
+                <section class="card">
+                    <div class="card-header">
+                        <h1 class="card-title" style="font-size: 1.2rem; font-weight: 700; margin: 0;">Batch AI Video
+                            Transcription</h1>
+
+                        <div style="display:flex; gap:10px; align-items:center;">
+                            <button id="groupBtn" class="btn-primary"
+                                style="padding: 0.35rem 0.8rem; font-size: 0.8rem; background:#059669;">
+                                <i class="fa-solid fa-users"></i> Group
+                            </button>
+                            <span class="chip"><i class="fa-solid fa-bolt"></i> Batch Mode</span>
+                        </div>
+                    </div>
+                    <p class="helper-text">Enter one video URL per line. Each video will be queued for background
+                        transcription.</p>
+
+                    <div id="trialCount" style="margin-bottom:14px;font-size:1rem;color:#6366f1;font-weight:500;"></div>
+
+                    <div style="margin-bottom:1rem;">
+                        <label class="field-label"><i class="fa-solid fa-link"></i> Video URLs (One per line)</label>
+                        <textarea id="videoUrls" class="textarea"
+                            placeholder="https://www.youtube.com/watch?v=...&#10;https://www.youtube.com/watch?v=..."></textarea>
+                    </div>
+
+                    <button id="batchConvertBtn" class="btn-primary" style="width:100%;justify-content:center;">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i> Process All Videos
+                    </button>
+
+
+
+                    <button id="consolidateBtn" class="btn-primary"
+                        style="width:100%;justify-content:center;margin-top:1rem;background:#2563eb;opacity:0.6;cursor:not-allowed;"
+                        disabled>
+                        <i class="fa-solid fa-layer-group"></i> Generate Topic-Wise Result
+                    </button>
+                </section>
+
+                <section class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Transcription Results</h2>
+                        <div style="display: flex; gap: 8px;">
+                            <button type="button" class="btn-ghost" onclick="copyConsolidatedText()">
+                                <i class="fa-solid fa-copy"></i> Copy
+                            </button>
+                            <button type="button" class="btn-ghost" onclick="openShareModal()">
+                                <i class="fa-solid fa-share-nodes"></i> Share
+                            </button>
+                        </div>
+                    </div>
+                    <div id="result">
+                        <div id="batchStatusMessage"
+                            style="display:flex; align-items:center; justify-content:center; height:100%; color:#9ca3af; text-align:center;">
+                            No batch status yet.
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <!-- Profile Modal -->
+    <div id="profileModal"
+        style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.35);z-index:10001;align-items:center;justify-content:center;backdrop-filter:blur(6px);">
+        <div
+            style="background:#fff;border-radius:18px;box-shadow:0 24px 60px rgba(15,23,42,0.35);padding:32px 30px 26px 30px;min-width:320px;max-width:92vw;text-align:center;position:relative;">
+            <h3 style="margin-bottom:18px;font-size:1.3rem;color:#111827;font-weight:600;">Profile</h3>
+            <div id="profileInfo" style="font-size:1rem;color:#222;margin-bottom:18px;text-align:left;"></div>
+            <button onclick="document.getElementById('profileModal').style.display='none'"
+                style="padding:8px 22px;background:#6366f1;color:#fff;border:none;border-radius:7px;font-weight:600;cursor:pointer;">Close</button>
+        </div>
+    </div>
+
+    <!-- Group Management Modal -->
+    <div id="groupManagementModal"
+        style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.35);z-index:10001;align-items:center;justify-content:center;backdrop-filter:blur(6px);">
+        <div
+            style="background:#fff;border-radius:18px;box-shadow:0 24px 60px rgba(15,23,42,0.35);padding:32px 30px 26px 30px;min-width:320px;max-width:450px;width:92vw;text-align:left;position:relative;max-height:85vh;overflow-y:auto;">
+
+            <!-- View 1: List Groups -->
+            <div id="groupListView">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+                    <h3 style="margin:0;font-size:1.1rem;color:#111827;font-weight:600;">Share With Group</h3>
+                    <button id="showCreateGroupViewBtn"
+                        style="padding:6px 12px;background:#059669;color:#fff;border:none;border-radius:6px;font-size:0.85rem;cursor:pointer;">
+                        <i class="fa-solid fa-plus"></i> New
+                    </button>
+                </div>
+
+                <div id="existingGroupsList" style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px;">
+                    <!-- Groups will be loaded here -->
+                    <div style="text-align:center;color:#6b7280;padding:20px;">Loading...</div>
+                </div>
+
+                <div style="display:flex;justify-content:flex-end;">
+                    <button onclick="closeGroupModal()"
+                        style="padding:8px 16px;background:#f3f4f6;color:#374151;border:1px solid #e5e7eb;border-radius:7px;font-weight:600;cursor:pointer;">Close</button>
+                </div>
+            </div>
+
+            <!-- View 2: Create Group -->
+            <div id="groupCreateView" style="display:none;">
+                <h3 style="margin:0 0 15px 0;font-size:1.3rem;color:#111827;font-weight:600;">Create New Group</h3>
+
+                <div style="display:flex;flex-direction:column;gap:1rem;margin-bottom:20px;">
+                    <div>
+                        <label
+                            style="display:block;font-size:0.85rem;color:#4b5563;font-weight:500;margin-bottom:5px;">Group
+                            Name</label>
+                        <input type="text" id="groupNameInput" class="input" placeholder="e.g. Content Team">
+                    </div>
+
+                    <div>
+                        <label
+                            style="display:block;font-size:0.85rem;color:#4b5563;font-weight:500;margin-bottom:5px;">Add
+                            Members (Emails)</label>
+                        <input type="text" id="groupEmailsInput" class="input"
+                            placeholder="alice@example.com, bob@example.com">
+                        <div style="font-size:0.75rem;color:#6b7280;margin-top:4px;">Comma separated</div>
+                    </div>
+                </div>
+
+                <div style="display:flex;justify-content:flex-end;gap:10px;">
+                    <button onclick="showGroupListView()"
+                        style="padding:8px 16px;background:#f3f4f6;color:#374151;border:1px solid #e5e7eb;border-radius:7px;font-weight:600;cursor:pointer;">Back</button>
+                    <button id="submitCreateGroupBtn"
+                        style="padding:8px 20px;background:#059669;color:#fff;border:none;border-radius:7px;font-weight:600;cursor:pointer;">Create</button>
+                </div>
+            </div>
+
+            <!-- View 3: Group Details -->
+            <div id="groupDetailsView" style="display:none;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
+                    <button onclick="showGroupListView()"
+                        style="background:none;border:none;color:#6b7280;cursor:pointer;font-size:0.9rem;">
+                        <i class="fa-solid fa-arrow-left"></i> Back
+                    </button>
+                    <h3 id="detailsGroupName"
+                        style="margin:0;font-size:1.2rem;color:#111827;font-weight:600; flex:1; text-align:center;">
+                        Group Details</h3>
+                    <button onclick="deleteCurrentGroup()" id="deleteGroupBtn" title="Delete Group"
+                        style="background:none;border:none;color:#ef4444;cursor:pointer;font-size:1rem;">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                </div>
+
+                <!-- Add Member Section -->
+                <div style="background:#f3f4f6;padding:15px;border-radius:10px;margin-bottom:20px;">
+                    <div style="font-size:0.85rem;font-weight:600;margin-bottom:8px;color:#374151;">Add New Member</div>
+                    <div style="display:flex;gap:8px;">
+                        <input type="email" id="newMemberEmail" class="input" placeholder="email@example.com"
+                            style="margin:0;">
+                        <button id="addMemberBtn"
+                            style="padding:8px 14px;background:#3b82f6;color:white;border:none;border-radius:6px;cursor:pointer;font-weight:600;">Add</button>
+                    </div>
+                </div>
+
+                <!-- Members List -->
+                <div style="margin-bottom:10px;font-size:0.9rem;font-weight:600;color:#374151;">Select Members to Send
+                    Transcription:</div>
+                <div id="groupMembersList"
+                    style="max-height:300px;overflow-y:auto;border:1px solid #e5e7eb;border-radius:8px;margin-bottom:20px;">
+                    <!-- Members loaded here -->
+                </div>
+
+                <div style="display:flex;justify-content:flex-end;">
+                    <button id="sendToMembersBtn" disabled
+                        style="padding:10px 20px;background:#059669;color:white;border:none;border-radius:7px;font-weight:600;cursor:pointer;opacity:0.5;">
+                        Send Transcription
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Signup Modal -->
+    <div id="signupModal"
+        style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.35);z-index:10000;align-items:center;justify-content:center;backdrop-filter:blur(6px);">
+        <div
+            style="background:#fff;border-radius:18px;box-shadow:0 24px 60px rgba(15,23,42,0.35);padding:32px 30px 26px 30px;min-width:320px;max-width:92vw;text-align:center;position:relative;">
+            <div style="font-size:2.4rem;color:#4f46e5;margin-bottom:10px;"><i class="fa-solid fa-user-plus"></i></div>
+            <h3 style="margin:0 0 8px 0;font-size:1.3rem;color:#111827;font-weight:600;">Sign in to continue</h3>
+            <p style="color:#4b5563;font-size:.9rem;margin-bottom:18px;">Please log in to keep track of your
+                transcriptions.</p>
+            <button id="googleSignup"
+                style="width:100%;margin-bottom:10px;padding:11px;font-size:.95rem;border-radius:8px;border:none;background:linear-gradient(135deg,#6366f1,#4f46e5);color:#fff;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;">
+                <i class="fa-brands fa-google"></i> Continue with Google
+            </button>
+            <!--<button onclick="document.getElementById('signupModal').style.display='none'"
+                style="background:none;border:none;color:#6b7280;font-size:0.85rem;cursor:pointer;margin-top:10px;">Cancel</button>-->
+        </div>
+    </div>
+
+    <script>
+        const loggedIn = getCookie("loggedIn") === "true";
+        let currentUserRole = "";
+
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+            return null;
+        }
+
+        function toggleMobileMenu() {
+            document.querySelector('.sidebar').classList.toggle('mobile-open');
+            document.getElementById('sidebarOverlay').classList.toggle('active');
+        }
+
+        function closeMobileMenu() {
+            document.querySelector('.sidebar').classList.remove('mobile-open');
+            document.getElementById('sidebarOverlay').classList.remove('active');
+        }
+
+        // MODAL LOGIC
+        function showSignupModal() {
+            document.getElementById('signupModal').style.display = 'flex';
+        }
+
+        // GOOGLE LOGIN
+        document.getElementById('googleSignup').onclick = () => {
+            sessionStorage.setItem("signedUp", "true");
+            window.location.href = "/login/google";
+        };
+
+        // AUTH UI
+        function updateSidebarAuth() {
+            const authText = document.getElementById('sidebarAuthText');
+            const authBtn = document.getElementById('sidebarAuth');
+            const authIcon = document.getElementById('authIcon');
+            const workspaceType = document.getElementById('workspaceType');
+            const profileBar = document.getElementById('profileBar');
+            const welcomeName = document.getElementById('welcomeName');
+            const sharingSection = document.getElementById('sharingSection');
+            const historyItem = document.getElementById('historySidebarItem');
+
+            const isSub = getCookie("subscribed") === "1";
+            const name = getCookie("name");
+
+            if (workspaceType) workspaceType.textContent = isSub ? 'Pro Workspace' : 'Workspace';
+
+            if (loggedIn) {
+                authText.textContent = 'Logout';
+                if (authIcon) {
+                    authIcon.classList.remove('fa-arrow-right-to-bracket');
+                    authIcon.classList.add('fa-arrow-right-from-bracket');
+                }
+                authBtn.onclick = (e) => {
+                    e.preventDefault();
+                    closeMobileMenu();
+                    const cookies = ["loggedIn", "email", "name", "subscribed", "free_trial_used"];
+                    cookies.forEach(c => {
+                        document.cookie = `${c}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+                    });
+                    window.location.href = "/";
+                };
+                if (profileBar) profileBar.style.display = 'flex';
+                if (welcomeName) welcomeName.textContent = `Welcome, ${name || 'User'}`;
+                if (sharingSection) sharingSection.style.display = 'block';
+                if (historyItem) historyItem.style.display = 'block';
+            } else {
+                authText.textContent = 'Sign in';
+                if (authIcon) {
+                    authIcon.classList.remove('fa-arrow-right-from-bracket');
+                    authIcon.classList.add('fa-arrow-right-to-bracket');
+                }
+                authBtn.onclick = (e) => {
+                    e.preventDefault();
+                    closeMobileMenu();
+                    showSignupModal();
+                };
+                if (profileBar) profileBar.style.display = 'none';
+                if (sharingSection) sharingSection.style.display = 'none';
+                if (historyItem) historyItem.style.display = 'none';
+            }
+        }
+
+        let batchMonitoringActive = false;
+
+        function loadHistoryData() {
+            const list = document.getElementById('historyList');
+            const consolidateBtn = document.getElementById('consolidateBtn');
+            fetch('/api/batch-history', { credentials: 'include' })
+                .then(res => res.json())
+                .then(data => {
+                    list.innerHTML = '';
+                    let showConsolidate = false;
+                    if (data.history && data.history.length > 0) {
+                        // 1. Identify the most recent batch_id
+                        let latestBatchId = null;
+                        for (let i = 0; i < data.history.length; i++) {
+                            if (data.history[i].batch_id) {
+                                latestBatchId = data.history[i].batch_id;
+                                break;
+                            }
+                        }
+
+                        if (latestBatchId) {
+                            // 2. Filter history for this batch
+                            const currentBatch = data.history.filter(item => item.batch_id === latestBatchId);
+
+                            // Detect if batch is active (queued/processing)
+                            const anyPending = currentBatch.some(item => item.status === 'queued' || item.status === 'processing');
+                            if (anyPending) {
+                                batchMonitoringActive = true;
+                            }
+
+                            // 3. Check if ALL items in this batch are 'completed'
+                            const allCompleted = currentBatch.every(item => item.status === 'completed');
+
+                            // Enable button and update style if all items in this batch are 'completed'
+                            if (allCompleted && batchMonitoringActive) {
+                                consolidateBtn.disabled = false;
+                                consolidateBtn.style.opacity = "1";
+                                consolidateBtn.style.cursor = "pointer";
+                            } else {
+                                consolidateBtn.disabled = true;
+                                consolidateBtn.style.opacity = "0.6";
+                                consolidateBtn.style.cursor = "not-allowed";
+                            }
+                        }
+
+                        data.history.forEach(item => {
+                            const li = document.createElement('li');
+                            li.className = 'history-item';
+                            li.style.padding = '10px 12px';
+                            li.style.cursor = 'pointer';
+                            li.style.borderRadius = '8px';
+                            li.style.color = '#d1d5db';
+                            li.style.fontSize = '0.75rem';
+                            li.style.borderBottom = '1px solid rgba(255,255,255,0.05)';
+                            li.style.marginBottom = '4px';
+                            li.style.transition = 'background 0.2s';
+
+                            const statusColor = item.status === 'completed' ? '#22c55e' : (item.status === 'failed' ? '#ef4444' : '#f59e0b');
+
+                            li.innerHTML = `
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+                  <span>${new Date(item.created_at).toLocaleDateString()}</span>
+                  <span style="color:${statusColor}">●</span>
+                </div>
+                <div style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${item.title || item.source}</div>
+              `;
+                            li.onclick = () => {
+                                closeMobileMenu();
+                                const statusColor = item.status === 'completed' ? '#22c55e' : (item.status === 'failed' ? '#ef4444' : '#f59e0b');
+                                let detailText = item.status === 'completed' ? "Transcription completed successfully. Results sent to your email." : (item.status === 'failed' ? "Transcription failed. Please check the source URL." : "Your request is being processed.");
+                                document.getElementById('result').innerHTML = `
+                  <div style="display:flex; align-items:center; justify-content:center; height:100%; text-align:center; padding: 20px; box-sizing: border-box;">
+                    <div style="font-size:1.15rem; font-weight:500; color:#111827; line-height:1.5; max-width:500px; animation: scaleIn 0.3s ease-out; background: rgba(255,255,255,0.02); padding: 25px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);">
+                      <i class="fa-solid ${item.status === 'completed' ? 'fa-circle-check' : (item.status === 'failed' ? 'fa-circle-xmark' : 'fa-hourglass-half')}" style="font-size: 2.2rem; color: ${statusColor}; margin-bottom: 15px; display: block;"></i>
+                      ${detailText}
+                    </div>
+                  </div>
+                `;
+                            };
+                            list.appendChild(li);
+                        });
+                    }
+
+                });
+        }
+
+        document.getElementById('sidebarHistory').onclick = (e) => {
+            e.preventDefault();
+            const list = document.getElementById('historyList');
+            if (list.style.display === 'none') {
+                list.style.display = 'flex';
+                loadHistoryData();
+            } else {
+                list.style.display = 'none';
+            }
+        };
+
+        function updateTrialCount() {
+            fetch('/api/profile', { credentials: 'include' })
+                .then(res => res.json())
+                .then(data => {
+                    if (data && data.free_trial_count !== undefined) {
+                        const rem = Math.max(0, 10 - data.free_trial_count);
+                        document.getElementById('trialCount').textContent = `Conversions left: ${rem} of 10`;
+                    }
+                });
+        }
+
+        // PROFILE MODAL TRIGGER
+        document.getElementById('sidebarProfile').onclick = (e) => {
+            e.preventDefault();
+            closeMobileMenu();
+            if (!loggedIn) {
+                alert("Please sign in first.");
+                return;
+            }
+            fetch('/api/profile', { credentials: 'include' })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.error) {
+                        document.getElementById('profileInfo').innerHTML = `<span style="color:red;">${data.error}</span>`;
+                    } else {
+                        document.getElementById('profileInfo').innerHTML =
+                            `<b>Email:</b> ${data.email}<br><b>Name:</b> ${data.name}<br><b>Status:</b> ${data.subscription_status}`;
+                    }
+                    document.getElementById('profileModal').style.display = 'flex';
+                })
+                .catch(err => {
+                    document.getElementById('profileInfo').innerHTML = `<span style="color:red;">Failed to load profile.</span>`;
+                    document.getElementById('profileModal').style.display = 'flex';
+                });
+        };
+
+        const batchBtn = document.getElementById('batchConvertBtn');
+        batchBtn.onclick = async function () {
+            const urlsText = document.getElementById('videoUrls').value.trim();
+            if (!urlsText) { alert("Enter some URLs."); return; }
+            if (!loggedIn) { alert("Please sign in on the main page first."); return; }
+
+            // Disable button during new conversion start
+            const consolidateBtn = document.getElementById('consolidateBtn');
+            consolidateBtn.disabled = true;
+            consolidateBtn.style.opacity = "0.6";
+            consolidateBtn.style.cursor = "not-allowed";
+            batchMonitoringActive = true;
+
+            // Trigger Ad Pop-up
+            showAdModal();
+
+            const urls = urlsText.split('\n').map(u => u.trim()).filter(u => u.length > 0);
+            const videos = urls.map(url => ({ url, title: url }));
+
+            batchBtn.disabled = true;
+            batchBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Queuing...';
+
+            try {
+                const res = await fetch('/api/process-playlist-background', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ videos, page_type: 'batch' }),
+                    credentials: 'include'
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    document.getElementById('result').innerHTML = `
+            <div style="text-align:center; animation: scaleIn 0.3s ease-out;">
+              <i class="fa-solid fa-circle-check" style="font-size: 3rem; color: #22c55e; margin-bottom: 20px; display: block;"></i>
+              <div style="font-size:1.2rem; font-weight:600; color:#111827;">Success!</div>
+              <div style="color:#4b5563; margin-top:8px;">${data.message}</div>
+              <div style="color:#6366f1; margin-top:10px; font-weight:500;">Check results in your email or history.</div>
+            </div>
+          `;
+                    document.getElementById('videoUrls').value = '';
+                    loadHistoryData();
+                } else {
+                    alert("Error: " + data.error);
+                }
+            } catch (e) {
+                alert("Failed: " + e.message);
+            } finally {
+                batchBtn.disabled = false;
+                batchBtn.innerHTML = '<i class="fa-solid fa-wand-magic-sparkles"></i> Process All Videos';
+            }
+        };
+
+
+        // GROUP MODAL LOGIC
+        let currentGroupId = null;
+        let currentGroupName = "";
+
+        function showTab(tab) {
+            const groupsTab = document.getElementById('groupsTabContent');
+            const bulkTab = document.getElementById('bulkTabContent');
+            const groupsBtn = document.getElementById('tab-groups');
+            const bulkBtn = document.getElementById('tab-bulk');
+
+            if (tab === 'groups') {
+                groupsTab.style.display = 'block';
+                bulkTab.style.display = 'none';
+                groupsBtn.style.color = '#4f46e5';
+                groupsBtn.style.borderBottom = '2px solid #4f46e5';
+                groupsBtn.style.fontWeight = '700';
+                bulkBtn.style.color = '#6b7280';
+                bulkBtn.style.borderBottom = 'none';
+                bulkBtn.style.fontWeight = '600';
+                loadGroups();
+            } else {
+                groupsTab.style.display = 'none';
+                bulkTab.style.display = 'block';
+                bulkBtn.style.color = '#4f46e5';
+                bulkBtn.style.borderBottom = '2px solid #4f46e5';
+                bulkBtn.style.fontWeight = '700';
+                groupsBtn.style.color = '#6b7280';
+                groupsBtn.style.borderBottom = 'none';
+                groupsBtn.style.fontWeight = '600';
+                loadBulkResultsHistory();
+            }
+        }
+
+        async function loadBulkResultsHistory() {
+            const listDiv = document.getElementById('bulkResultsHistoryList');
+            listDiv.innerHTML = '<div style="text-align:center;color:#6b7280;padding:20px;">Loading history...</div>';
+
+            try {
+                const res = await fetch('/api/bulk-results', { credentials: 'include' });
+                const data = await res.json();
+                listDiv.innerHTML = '';
+
+                if (data.results && data.results.length > 0) {
+                    data.results.forEach(r => {
+                        const date = new Date(r.created_at);
+                        const dateStr = date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+                        const div = document.createElement('div');
+                        div.style.padding = '12px';
+                        div.style.border = '1px solid #e5e7eb';
+                        div.style.borderRadius = '10px';
+                        div.style.background = '#f9fafb';
+                        div.style.display = 'flex';
+                        div.style.justifyContent = 'space-between';
+                        div.style.alignItems = 'center';
+
+                        div.innerHTML = `
+                            <div>
+                                <div style="font-weight:600; font-size:0.9rem; color:#1f2937;">Topic-Wise Synthesis</div>
+                                <div style="font-size:0.75rem; color:#6b7280; margin-top:2px;">${dateStr}</div>
+                            </div>
+                            <button onclick='viewStoredBulkResult(${JSON.stringify(r.id)})' style="padding:6px 12px; background:#4f46e5; color:white; border:none; border-radius:6px; font-size:0.8rem; cursor:pointer;">
+                                View
+                            </button>
+                        `;
+                        listDiv.appendChild(div);
+                    });
+                } else {
+                    listDiv.innerHTML = '<div style="text-align:center;color:#6b7280;padding:30px;">No bulk results found yet.</div>';
+                }
+            } catch (e) {
+                listDiv.innerHTML = '<div style="color:red; text-align:center; padding:20px;">Failed to load history.</div>';
+            }
+        }
+
+        async function viewStoredBulkResult(id) {
+            try {
+                const res = await fetch('/api/bulk-results', { credentials: 'include' });
+                const data = await res.json();
+                const result = data.results.find(r => r.id === id);
+                if (result) {
+                    closeGroupModal();
+                    document.getElementById('result').innerHTML = `
+                        <div style="padding: 2.5rem; animation: scaleIn 0.5s ease-out; background: #ffffff; border-radius: 1.5rem; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04); width: 100%; box-sizing: border-box; color: #1f2937; border: 1px solid #f3f4f6; position: relative;">
+                            <div style="position: absolute; top: 1.5rem; right: 1.5rem; display: flex; gap: 10px;">
+                                <span style="background: #eef2ff; color: #4338ca; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.025em; border: 1px solid #c7d2fe;">
+                                    <i class="fa-solid fa-clock-rotate-left"></i> Stored Result
+                                </span>
+                                <span style="background: #eef2ff; color: #4338ca; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.025em; border: 1px solid #c7d2fe;">
+                                    <i class="fa-solid fa-clock-rotate-left"></i> Stored Result
+                                </span>
+                            </div>
+                            
+                            <div style="text-align: center; margin-bottom: 2.5rem;">
+                                <h2 style="color: #4f46e5; margin: 0; font-size: 1.75rem; font-weight: 800; letter-spacing: -0.025em;">Topic-Wise Deep Dive</h2>
+                                <p style="color: #6b7280; font-size: 0.875rem; margin-top: 0.5rem;">Archived result from the database</p>
+                            </div>
+
+                            <div id="consolidatedOutput" style="line-height: 1.8; color: #374151; white-space: pre-wrap; font-size: 1.05rem; text-align: left; font-family: 'Inter', system-ui, sans-serif;">${result.content}</div>
+                        </div>
+                    `;
+                }
+            } catch (e) {
+                alert("Error loading result: " + e.message);
+            }
+        }
+
+        function showGroupListView() {
+            document.getElementById('groupListView').style.display = 'block';
+            document.getElementById('groupCreateView').style.display = 'none';
+            document.getElementById('groupDetailsView').style.display = 'none';
+            loadGroups();
+        }
+
+        function closeGroupModal() {
+            document.getElementById('groupManagementModal').style.display = 'none';
+        }
+
+        async function loadGroups() {
+            const listDiv = document.getElementById('existingGroupsList');
+            listDiv.innerHTML = '<div style="text-align:center;color:#6b7280;padding:20px;">Loading...</div>';
+
+            try {
+                const res = await fetch('/api/groups/list', { credentials: 'include' });
+                const data = await res.json();
+                listDiv.innerHTML = '';
+
+                if (data.groups && data.groups.length > 0) {
+                    data.groups.forEach(g => {
+                        const dateStr = new Date(g.created_at).toLocaleDateString();
+                        const div = document.createElement('div');
+                        div.style.padding = '12px';
+                        div.style.border = '1px solid #e5e7eb';
+                        div.style.borderRadius = '8px';
+                        div.style.background = '#f9fafb';
+                        div.style.cursor = 'pointer';
+                        div.style.transition = 'background 0.2s';
+                        div.onmouseover = () => div.style.background = '#eef2ff';
+                        div.onmouseout = () => div.style.background = '#f9fafb';
+                        div.onclick = () => openGroupDetails(g.id, g.name, g.role);
+
+                        div.innerHTML = `
+                            <div style="display:flex;justify-content:space-between;align-items:center;">
+                                <div style="font-weight:600;color:#1f2937;">${g.name}</div>
+                                <span style="font-size:0.75rem;background:#e0e7ff;color:#4338ca;padding:2px 8px;borderRadius:12px;">${g.role}</span>
+                            </div>
+                            <div style="font-size:0.8rem;color:#6b7280;margin-top:4px;">
+                                ${g.member_count} members • Created ${dateStr}
+                            </div>
+                        `;
+                        listDiv.appendChild(div);
+                    });
+                } else {
+                    listDiv.innerHTML = '<div style="text-align:center;color:#6b7280;padding:15px;background:#f9fafb;border-radius:8px;">No groups found. Create one!</div>';
+                }
+            } catch (e) {
+                listDiv.innerHTML = '<div style="color:red;text-align:center;">Failed to load groups.</div>';
+            }
+        }
+
+        function openGroupDetails(id, name, role) {
+            currentGroupId = id;
+            currentGroupName = name;
+            currentUserRole = role;
+            document.getElementById('detailsGroupName').innerText = name;
+            document.getElementById('groupListView').style.display = 'none';
+            document.getElementById('groupCreateView').style.display = 'none';
+            document.getElementById('groupDetailsView').style.display = 'block';
+
+            // Only show delete button if user is admin
+            const deleteBtn = document.getElementById('deleteGroupBtn');
+            if (deleteBtn) {
+                deleteBtn.style.display = (role === 'admin') ? 'block' : 'none';
+            }
+
+            loadGroupMembers(id);
+        }
+
+        async function deleteCurrentGroup() {
+            if (!currentGroupId) return;
+            if (!confirm(`Are you sure you want to delete the group "${currentGroupName}"? This cannot be undone.`)) return;
+
+            try {
+                const res = await fetch('/api/groups/delete', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        group_id: currentGroupId
+                    }),
+                    credentials: 'include'
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    console.log("Group deleted successfully.");
+                    showGroupListView();
+                } else {
+                    alert("Error: " + data.error);
+                }
+            } catch (e) {
+                alert("Failed to delete group.");
+            }
+        }
+
+        async function loadGroupMembers(id) {
+            const listDiv = document.getElementById('groupMembersList');
+            listDiv.innerHTML = '<div style="padding:15px;text-align:center;">Loading members...</div>';
+            document.getElementById('sendToMembersBtn').disabled = true;
+            document.getElementById('sendToMembersBtn').style.opacity = '0.5';
+
+            try {
+                const res = await fetch(`/api/groups/${id}/members`, { credentials: 'include' });
+                const data = await res.json();
+                listDiv.innerHTML = '';
+
+                if (data.members) {
+                    data.members.forEach(m => {
+                        const div = document.createElement('div');
+                        div.style.padding = '10px 15px';
+                        div.style.borderBottom = '1px solid #f3f4f6';
+                        div.style.display = 'flex';
+                        div.style.alignItems = 'center';
+                        div.style.gap = '10px';
+
+                        const checkbox = document.createElement('input');
+                        checkbox.type = 'checkbox';
+                        checkbox.value = m.email;
+                        checkbox.className = 'member-checkbox';
+                        checkbox.onchange = updateSendButtonState;
+
+                        div.appendChild(checkbox);
+
+                        const info = document.createElement('div');
+                        info.innerHTML = `<div style="font-weight:500;color:#1f2937;">${m.name || m.email}</div><div style="font-size:0.75rem;color:#6b7280;">${m.email} (${m.role})</div>`;
+                        div.appendChild(info);
+
+                        // Add remove button for admins
+                        if (currentUserRole === 'admin' && m.email !== getCookie("email")) {
+                            const removeBtn = document.createElement('button');
+                            removeBtn.innerHTML = '<i class="fa-solid fa-user-minus"></i>';
+                            removeBtn.title = "Remove Member";
+                            removeBtn.style.cssText = "margin-left:auto; background:none; border:none; color:#ef4444; cursor:pointer; font-size:0.9rem; padding:5px;";
+                            removeBtn.onclick = (e) => {
+                                e.stopPropagation();
+                                removeMemberFromGroup(m.email);
+                            };
+                            div.appendChild(removeBtn);
+                        }
+
+                        listDiv.appendChild(div);
+                    });
+                }
+            } catch (e) {
+                listDiv.innerHTML = '<div style="padding:10px;color:red;">Failed to load members.</div>';
+            }
+        }
+
+        async function removeMemberFromGroup(memberEmail) {
+            if (!confirm(`Are you sure you want to remove ${memberEmail} from this group?`)) return;
+
+            try {
+                const res = await fetch('/api/groups/remove-member', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ group_id: currentGroupId, email: memberEmail }),
+                    credentials: 'include'
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    console.log("Member removed successfully.");
+                    loadGroupMembers(currentGroupId);
+                } else {
+                    alert("Error: " + data.error);
+                }
+            } catch (e) {
+                alert("Failed to remove member.");
+            }
+        }
+
+        function updateSendButtonState() {
+            const checked = document.querySelectorAll('.member-checkbox:checked').length > 0;
+            const btn = document.getElementById('sendToMembersBtn');
+            btn.disabled = !checked;
+            btn.style.opacity = checked ? '1' : '0.5';
+        }
+
+        document.getElementById('addMemberBtn').onclick = async function () {
+            const emailInput = document.getElementById('newMemberEmail');
+            const email = emailInput.value.trim();
+            const btn = document.getElementById('addMemberBtn');
+
+            if (!email) return;
+
+            btn.disabled = true;
+            btn.innerText = '...';
+
+            try {
+                const res = await fetch('/api/groups/add-member', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ group_id: currentGroupId, email: email }),
+                    credentials: 'include'
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    console.log("Member added!");
+                    emailInput.value = '';
+                    loadGroupMembers(currentGroupId);
+                } else {
+                    alert("Error: " + (data.message || data.error));
+                }
+            } catch (e) {
+                alert("Failed: " + e.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerText = 'Add';
+            }
+        };
+
+        // SHARE LOGIC
+        let pendingShareContent = "";
+
+        function openShareModal() {
+            if (!loggedIn) { alert("Sign in first."); return; }
+
+            const resultDiv = document.getElementById('result');
+            if (!resultDiv || resultDiv.innerText.includes("No batch status yet") || resultDiv.innerText.includes("Queuing") || resultDiv.innerText.includes("Analyzing")) {
+                alert("No transcription available to share.");
+                return;
+            }
+
+            // Auto-select text logic: logic to determine what we are sharing
+            // If hidden raw content exists (from batch process), use that
+            const raw = document.getElementById('rawConsolidatedContent');
+            const outputDiv = document.getElementById('consolidatedOutput');
+
+            if (raw && raw.textContent && raw.textContent.trim()) {
+                pendingShareContent = raw.textContent;
+            } else if (outputDiv && outputDiv.innerText.trim()) {
+                pendingShareContent = outputDiv.innerText;
+            } else if (resultDiv && resultDiv.innerText.trim()) {
+                pendingShareContent = resultDiv.innerText;
+            } else {
+                pendingShareContent = "";
+            }
+
+            if (!pendingShareContent) {
+                alert("No content to share.");
+                return;
+            }
+
+            document.getElementById('groupManagementModal').style.display = 'flex';
+            showGroupListView();
+        }
+
+        document.getElementById('sendToMembersBtn').onclick = async function () {
+            const fileInput = document.getElementById('shareFileInput');
+            let contentToSend = pendingShareContent;
+            let titleToSend = "Shared Transcription Result";
+
+            // CHECK FILE INPUT FIRST
+            if (fileInput && fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+                try {
+                    contentToSend = await readFileAsText(file);
+                    titleToSend = "Shared File: " + file.name;
+                } catch (e) {
+                    alert("Error reading file: " + e);
+                    return;
+                }
+            } else {
+                // FALLBACK TO CAPTURED CONTENT
+                if (!contentToSend) {
+                    const outputDiv = document.getElementById('consolidatedOutput');
+                    if (outputDiv) {
+                        contentToSend = outputDiv.innerHTML;
+                    } else {
+                        const resultDiv = document.getElementById('result');
+                        if (resultDiv && resultDiv.innerText.trim() && !resultDiv.innerText.includes("Queuing") && !resultDiv.innerText.includes("Success!")) {
+                            contentToSend = resultDiv.innerHTML;
+                        }
+                    }
+                }
+            }
+
+            if (!contentToSend) {
+                alert("No content to share. Please select a file or ensure transcription result is visible.");
+                return;
+            }
+
+            const checkboxes = document.querySelectorAll('.member-checkbox:checked');
+            const emails = Array.from(checkboxes).map(cb => cb.value);
+
+            if (emails.length === 0) return;
+
+            const btn = document.getElementById('sendToMembersBtn');
+            btn.disabled = true;
+            btn.innerText = "Sending...";
+
+            try {
+                const res = await fetch('/api/groups/share', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        emails: emails,
+                        content: contentToSend,
+                        title: titleToSend
+                    }),
+                    credentials: 'include'
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    console.log("Sent successfully!");
+                    checkboxes.forEach(cb => cb.checked = false);
+                    if (fileInput) fileInput.value = ''; // clear file
+                    updateSendButtonState();
+                    closeGroupModal();
+                } else {
+                    alert("Error: " + data.message);
+                }
+            } catch (e) {
+                alert("Failed to send: " + e.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerText = "Send Transcription";
+            }
+        };
+
+        // Helper
+        function readFileAsText(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = (e) => resolve(e.target.result);
+                reader.onerror = (e) => reject(e);
+                reader.readAsText(file);
+            });
+        }
+
+
+        const groupBtn = document.getElementById('groupBtn');
+        groupBtn.onclick = function () {
+            if (!loggedIn) { alert("Sign in first."); return; }
+            document.getElementById('groupManagementModal').style.display = 'flex';
+            showGroupListView();
+        };
+
+        const showCreateBtn = document.getElementById('showCreateGroupViewBtn');
+        if (showCreateBtn) {
+            showCreateBtn.onclick = function () {
+                document.getElementById('groupListView').style.display = 'none';
+                document.getElementById('groupCreateView').style.display = 'block';
+            };
+        }
+
+        document.getElementById('submitCreateGroupBtn').onclick = async function () {
+            const btn = document.getElementById('submitCreateGroupBtn');
+            const name = document.getElementById('groupNameInput').value.trim();
+            const emailsStr = document.getElementById('groupEmailsInput').value.trim();
+
+            if (!name) { alert("Group name is required"); return; }
+
+            // Parse emails
+            const emails = emailsStr ? emailsStr.split(',').map(e => e.trim()).filter(e => e.length > 0) : [];
+
+            btn.disabled = true;
+            btn.innerHTML = "Creating...";
+
+            try {
+                const res = await fetch('/api/groups/create', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ group_name: name, member_emails: emails }),
+                    credentials: 'include'
+                });
+                const data = await res.json();
+
+                if (res.ok) {
+                    console.log("Group Created! " + data.message);
+                    showGroupListView();
+                    document.getElementById('groupNameInput').value = '';
+                    document.getElementById('groupEmailsInput').value = '';
+                } else {
+                    alert("Error: " + data.error);
+                }
+            } catch (e) {
+                alert("Failed: " + e.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = "Create";
+            }
+        };
+
+        const consolidateBtn = document.getElementById('consolidateBtn');
+        consolidateBtn.onclick = async function () {
+            consolidateBtn.disabled = true;
+            consolidateBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Analyzing...';
+
+            try {
+                const res = await fetch('/api/consolidate-topic-wise', {
+                    method: 'POST',
+                    credentials: 'include'
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    const tabsHtml = parseAndRenderTabs('tabs-consolidated-main', data.consolidated_text);
+
+                    document.getElementById('result').innerHTML = `
+                        <div style="padding: 2.5rem; animation: scaleIn 0.5s ease-out; background: #ffffff; border-radius: 1.5rem; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04); width: 100%; box-sizing: border-box; color: #1f2937; border: 1px solid #f3f4f6; position: relative;">
+                            <div style="display:none;" id="rawConsolidatedContent">${data.consolidated_text.replace(/</g, '&lt;')}</div>
+                            <div style="position: absolute; top: 1.5rem; right: 1.5rem; display: flex; gap: 10px;">
+                            </div>
+                            
+                            <div style="text-align: center; margin-bottom: 2.5rem;">
+                                <h2 style="color: #4f46e5; margin: 0; font-size: 1.75rem; font-weight: 800; letter-spacing: -0.025em;">Topic-Wise Deep Dive</h2>
+                                <p style="color: #6b7280; font-size: 0.875rem; margin-top: 0.5rem;">Comprehensive synthesis categorized by content type</p>
+                            </div>
+
+                            <div id="consolidatedOutput">
+                                ${tabsHtml}
+                            </div>
+                        </div>
+                    `;
+                    // SUCCESS: Keep button disabled and turn off monitoring for this batch
+                    batchMonitoringActive = false;
+                    consolidateBtn.style.opacity = "0.6";
+                    consolidateBtn.style.cursor = "not-allowed";
+                } else {
+                    alert("Error: " + data.error);
+                    consolidateBtn.disabled = false;
+                }
+            } catch (e) {
+                alert("Consolidation failed: " + e.message);
+                consolidateBtn.disabled = false;
+            } finally {
+                consolidateBtn.innerHTML = '<i class="fa-solid fa-layer-group"></i> Generate Topic-Wise Result';
+            }
+        };
+
+        // TAB LOGIC (Copied from bulk-results)
+        window.switchTab = function (btn, tabId) {
+            const container = btn.closest('.tabs-container');
+            container.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            container.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            btn.classList.add('active');
+            const target = document.getElementById(tabId);
+            if (target) target.classList.add('active');
+        };
+
+        function formatContent(text) {
+            if (!text) return "";
+
+            const lines = text.split('\n');
+            let html = "";
+            let inList = false;
+
+            lines.forEach(line => {
+                const trimmed = line.trim();
+                // Handle formatting inside lines (Bold, Italic, Link)
+                const formatInline = (str) => {
+                    return str
+                        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Bold
+                        .replace(/\*(.*?)\*/g, '<em>$1</em>') // Italic
+                        .replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" style="color:#4f46e5; text-decoration:underline;">$1</a>'); // Auto-link
+                };
+
+                if (trimmed.length === 0) {
+                    if (inList) { html += "</ul>"; inList = false; }
+                    return;
+                }
+
+                if (trimmed.startsWith("### ")) {
+                    if (inList) { html += "</ul>"; inList = false; }
+                    html += `<h3 style="font-size:1.1rem; font-weight:600; color:#111827; margin-top:1.5rem; margin-bottom:0.75rem; border-left: 3px solid #6366f1; padding-left: 10px;">${formatInline(trimmed.substring(4))}</h3>`;
+                } else if (trimmed.startsWith("## ") || trimmed.startsWith("Category:")) {
+                    if (inList) { html += "</ul>"; inList = false; }
+                    let title = trimmed.startsWith("## ") ? trimmed.substring(3) : trimmed;
+                    if (title.startsWith("Category:")) title = title.substring(9).trim();
+                    html += `<h2 style="font-size:1.25rem; font-weight:700; color:#111827; margin-top:1.5rem; margin-bottom:1rem; border-bottom:1px solid #e5e7eb; padding-bottom:8px;">${formatInline(title)}</h2>`;
+                } else if (trimmed.startsWith("- ") || trimmed.startsWith("• ")) {
+                    if (!inList) { html += '<ul style="margin-bottom:1rem; padding-left:1.5rem; color:#374151;">'; inList = true; }
+                    html += `<li style="margin-bottom:0.4rem;">${formatInline(trimmed.substring(2))}</li>`;
+                } else {
+                    if (inList) { html += "</ul>"; inList = false; }
+                    html += `<p style="margin-bottom:0.8rem; line-height:1.7; color:#374151;">${formatInline(trimmed)}</p>`;
+                }
+            });
+
+            if (inList) { html += "</ul>"; }
+            return html;
+        }
+
+        function parseAndRenderTabs(containerId, fullText) {
+            const split1 = fullText.split("COMPLETE TRANSCRIPTIONS FROM ALL SOURCES");
+            let analysisText = split1[0] || "";
+            let remainder = split1[1] || "";
+
+            const split2 = remainder.split("Sources used in this synthesis:");
+            let transcriptsText = split2[0] || "";
+            let sourcesText = split2[1] || "";
+
+            const categoryMap = new Map();
+            const categoryRegex = /## Category:\s*(.*?)\n([\s\S]*?)(?=## Category:|$)/g;
+
+            analysisText = analysisText.trim();
+            let match;
+            let matchFound = false;
+            while ((match = categoryRegex.exec(analysisText)) !== null) {
+                matchFound = true;
+                const name = match[1].trim();
+                const content = match[2].trim();
+                if (categoryMap.has(name)) {
+                    categoryMap.set(name, categoryMap.get(name) + "\n\n" + content);
+                } else {
+                    categoryMap.set(name, content);
+                }
+            }
+
+            const categories = Array.from(categoryMap.entries()).map(([name, content]) => ({ name, content }));
+
+            if (!matchFound) {
+                categories.push({ name: "General Analysis", content: analysisText });
+            }
+
+            let navHtml = "";
+            let contentHtml = "";
+
+            categories.forEach((cat, idx) => {
+                const tabId = `${containerId}-cat-${idx}`;
+                const isActive = idx === 0 ? "active" : "";
+                navHtml += `<button class="tab-btn ${isActive}" onclick="switchTab(this, '${tabId}')">${cat.name}</button>`;
+                contentHtml += `<div id="${tabId}" class="tab-content ${isActive}">${formatContent(cat.content)}</div>`;
+            });
+
+            // Metadata sections (Not in tabs)
+            let metaHtml = "";
+            if (transcriptsText.trim()) {
+                metaHtml += `
+                    <div style="margin-top:2rem; border-top:1px solid #e5e7eb; padding-top:1.5rem;">
+                        <details style="cursor:pointer; background:#f9fafb; border-radius:10px; border:1px solid #e5e7eb;">
+                            <summary style="padding:12px 20px; font-weight:700; color:#4b5563; list-style:none; display:flex; justify-content:space-between; align-items:center;">
+                                <span><i class="fa-solid fa-file-lines" style="margin-right:8px;"></i> FULL TRANSCRIPTIONS</span>
+                                <i class="fa-solid fa-chevron-down" style="font-size:0.8rem;"></i>
+                            </summary>
+                            <div style="padding:20px; background:#fff; border-top:1px solid #e5e7eb; max-height:400px; overflow-y:auto; font-size:0.9rem; line-height:1.6; color:#374151;">
+                                ${formatContent(transcriptsText.trim())}
+                            </div>
+                        </details>
+                    </div>
+                `;
+            }
+
+            if (sourcesText.trim()) {
+                metaHtml += `
+                    <div style="margin-top:1rem;">
+                        <details style="cursor:pointer; background:#f9fafb; border-radius:10px; border:1px solid #e5e7eb;">
+                            <summary style="padding:12px 20px; font-weight:700; color:#4b5563; list-style:none; display:flex; justify-content:space-between; align-items:center;">
+                                <span><i class="fa-solid fa-link" style="margin-right:8px;"></i> SOURCES USED</span>
+                                <i class="fa-solid fa-chevron-down" style="font-size:0.8rem;"></i>
+                            </summary>
+                            <div style="padding:20px; background:#fff; border-top:1px solid #e5e7eb; font-size:0.9rem; color:#374151;">
+                                ${formatContent(sourcesText.trim())}
+                            </div>
+                        </details>
+                    </div>
+                `;
+            }
+
+            return `
+                <div class="tabs-container" id="${containerId}">
+                    <div style="display:flex; justify-content:space-between; align-items:center; background:#f8fafc; border-bottom:1px solid #e5e7eb;">
+                        <div class="tabs-nav" style="border-bottom:none; flex:1; background:transparent;">
+                            ${navHtml}
+                        </div>
+                        <button onclick="toggleMaximize(this, '${containerId}')" title="Maximize" style="border:none; background:transparent; cursor:pointer; padding:0 15px; color:#64748b; transition:color 0.2s;">
+                            <i class="fa-solid fa-expand"></i>
+                        </button>
+                    </div>
+                    ${contentHtml}
+                </div>
+                ${metaHtml}
+            `;
+        }
+
+        window.toggleMaximize = function (btn, containerId) {
+            const container = document.getElementById(containerId);
+            const contents = container.querySelectorAll('.tab-content');
+            const icon = btn.querySelector('i');
+
+            let isExpanded = false;
+            contents.forEach(c => {
+                c.classList.toggle('expanded');
+                if (c.classList.contains('expanded')) isExpanded = true;
+            });
+
+            if (isExpanded) {
+                icon.classList.remove('fa-expand');
+                icon.classList.add('fa-compress');
+                btn.title = "Minimize";
+            } else {
+                icon.classList.remove('fa-compress');
+                icon.classList.add('fa-expand');
+                btn.title = "Maximize";
+            }
+        };
+
+        let lastHistoryJson = "";
+        async function checkActiveStatus() {
+            if (!loggedIn) return;
+            try {
+                const res = await fetch('/api/batch-history', { credentials: 'include' });
+                const data = await res.json();
+                const currentJson = JSON.stringify(data.history.map(h => ({ id: h.id, status: h.status })));
+                if (currentJson !== lastHistoryJson) {
+                    lastHistoryJson = currentJson;
+                    loadHistoryData();
+                    updateTrialCount();
+                }
+            } catch (e) { console.warn("Status poll failed:", e); }
+            setTimeout(checkActiveStatus, 5000);
+        }
+
+        // HELPERS
+        function copyConsolidatedText() {
+            const resultDiv = document.getElementById('result');
+            if (!resultDiv || resultDiv.innerText.includes("No batch status yet") || resultDiv.innerText.includes("Queuing") || resultDiv.innerText.includes("Analyzing")) {
+                alert("No content to copy.");
+                return;
+            }
+            const output = document.getElementById('consolidatedOutput') || resultDiv;
+            const text = output ? output.innerText.trim() : "";
+
+            if (!text) {
+                alert("No content to copy.");
+                return;
+            }
+
+            navigator.clipboard.writeText(text).then(() => {
+                alert("Result copied to clipboard!");
+            }).catch(err => {
+                console.error('Could not copy text: ', err);
+            });
+        }
+
+        function downloadConsolidatedText() {
+            const output = document.getElementById('consolidatedOutput') || document.getElementById('result');
+            const text = output ? output.innerText.trim() : "";
+
+            if (!text || text === "No batch status yet.") {
+                alert("No content to download.");
+                return;
+            }
+
+            const blob = new Blob([text], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'transcription_result.txt';
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            updateSidebarAuth();
+            updateTrialCount();
+            checkActiveStatus();
+        });
+
+    </script>
+    <!-- Ad Modal -->
+    <div id="adModal"
+        style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.8);z-index:99999;align-items:center;justify-content:center;backdrop-filter:blur(8px);">
+        <div
+            style="background:#fff;border-radius:12px;padding:20px;max-width:350px;width:90%;text-align:center;position:relative;">
+            <button onclick="closeAdModal()"
+                style="position:absolute;top:-15px;right:-15px;background:#ef4444;color:white;border:none;border-radius:50%;width:30px;height:30px;cursor:pointer;font-weight:bold;box-shadow:0 4px 10px rgba(0,0,0,0.2);">X</button>
+            <div style="margin-bottom:15px;font-size:0.8rem;color:#6b7280;text-transform:uppercase;letter-spacing:1px;">
+                Advertisement</div>
+            <div
+                style="min-height:250px;background:#f3f4f6;display:flex;align-items:center;justify-content:center;border-radius:8px;">
+                <!-- Ad Unit Placeholder -->
+                <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-7297475514195167"
+                    data-ad-slot="0000000000" data-ad-format="auto" data-full-width-responsive="true"></ins>
+                <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+            <button onclick="closeAdModal()"
+                style="margin-top:20px;padding:10px 20px;background:#4f46e5;color:white;border:none;border-radius:6px;width:100%;font-weight:600;cursor:pointer;">Continue
+                to Results</button>
+        </div>
+    </div>
+
+    <script>
+        function showAdModal() {
+            document.getElementById('adModal').style.display = 'flex';
+        }
+        function closeAdModal() {
+            document.getElementById('adModal').style.display = 'none';
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico?v=1">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1">
+    <title>Contact Us | MLOPS Support</title>
+    <meta name="description"
+        content="Get in touch with MLOPS Solution for support, inquiries, or feedback. We're here to help you with your AI infrastructure needs.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <script src="https://js.stripe.com/v3/"></script>
+
+    <style>
+        html,
+        body {
+            height: 100vh;
+            width: 100vw;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            height: 100vh;
+            width: 100vw;
+            background: #f3f4f6;
+            color: #111827;
+            overflow: hidden;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* === CORE LAYOUT === */
+
+        body.style-1 {
+            background: #f3f4f6;
+        }
+
+        .app-root {
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            min-width: 0;
+            min-height: 0;
+        }
+
+        .logo-text {
+            font-weight: 700;
+            font-size: 1.1rem;
+            letter-spacing: 0.03em;
+            display: inline-flex;
+            align-items: center;
+            gap: .45rem;
+        }
+
+        .sidebar {
+            width: 230px;
+            background: #111827;
+            color: #e5e7eb;
+            padding: 1.2rem 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .sidebar .nav-section-title {
+            font-size: .75rem;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            color: #6b7280;
+            margin-bottom: .3rem;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: .15rem;
+            font-size: .86rem;
+        }
+
+        .sidebar li a {
+            display: flex;
+            align-items: center;
+            gap: .45rem;
+            padding: .45rem .6rem;
+            border-radius: .45rem;
+            color: #d1d5db;
+        }
+
+        .sidebar li a.active,
+        .sidebar li a:hover {
+            background: rgba(55, 65, 81, .8);
+            color: #fff;
+        }
+
+        .main-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            min-height: 0;
+            height: 100vh;
+            max-height: 100vh;
+        }
+
+        .topbar {
+            height: 60px;
+            border-bottom: 1px solid #e5e7eb;
+            background: #ffffffcc;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1.5rem;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: .75rem;
+            font-size: .82rem;
+            color: #4b5563;
+        }
+
+        .page-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 2rem;
+            min-width: 0;
+            min-height: 0;
+        }
+
+        /* CONTACT FORM STYLES */
+        .contact-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            border: 1px solid #e5e7eb;
+        }
+
+        .contact-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .contact-header h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #111827;
+            margin-bottom: 0.5rem;
+        }
+
+        .contact-header p {
+            color: #6b7280;
+            font-size: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .form-control:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .submit-btn {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            padding: 12px;
+            background: #4f46e5;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .submit-btn:hover {
+            background: #4338ca;
+        }
+
+        .submit-btn:disabled {
+            background: #a5b4fc;
+            cursor: not-allowed;
+        }
+
+        .success-message {
+            display: none;
+            padding: 1rem;
+            background: #ecfdf5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .error-message {
+            display: none;
+            padding: 1rem;
+            background: #fef2f2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        /* ========== MOBILE RESPONSIVE STYLES ========== */
+
+        .mobile-menu-btn {
+            display: none;
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            z-index: 10002;
+            background: #6366f1;
+            color: white;
+            border: none;
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 10000;
+            backdrop-filter: blur(4px);
+        }
+
+        @media (max-width: 900px) {
+            .mobile-menu-btn {
+                display: flex;
+            }
+
+            .sidebar {
+                position: fixed;
+                left: -280px;
+                top: 0;
+                height: 100vh;
+                z-index: 10001;
+                transition: left 0.3s ease;
+                box-shadow: 4px 0 12px rgba(0, 0, 0, 0.1);
+            }
+
+            .sidebar.mobile-open {
+                left: 0;
+            }
+
+            .sidebar-overlay.active {
+                display: block;
+            }
+
+            .app-root {
+                flex-direction: column;
+            }
+
+            .main-panel {
+                width: 100%;
+            }
+
+            .topbar {
+                padding-left: 65px;
+            }
+
+            .contact-container {
+                padding: 24px;
+            }
+        }
+
+        .badge-soft {
+            display: inline-flex;
+            align-items: center;
+            gap: .25rem;
+            padding: .2rem .5rem;
+            border-radius: 999px;
+            background: #eef2ff;
+            color: #4f46e5;
+            font-size: .7rem;
+            font-weight: 600;
+        }
+
+        /* Modal Styles */
+        #signupModal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.35);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(6px);
+        }
+
+        .modal-card {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 24px 60px rgba(15, 23, 42, 0.35);
+            padding: 32px 30px 26px 30px;
+            min-width: 320px;
+            max-width: 92vw;
+            text-align: center;
+            position: relative;
+            animation: popIn 0.3s cubic-bezier(.68, -0.55, .27, 1.55);
+        }
+
+        @keyframes popIn {
+            0% {
+                transform: scale(0.7);
+                opacity: 0;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .modal-icon {
+            font-size: 2.4rem;
+            color: #4f46e5;
+            margin-bottom: 10px;
+        }
+
+        .modal-card h3 {
+            margin: 0 0 8px 0;
+            font-size: 1.3rem;
+            color: #111827;
+            font-weight: 600;
+        }
+
+        .modal-card p {
+            color: #4b5563;
+            font-size: .9rem;
+            margin-bottom: 18px;
+        }
+
+        .signup-btn {
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 11px;
+            font-size: .95rem;
+            border-radius: 8px;
+            border: none;
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+            color: #fff;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.18);
+            transition: background 0.15s, transform 0.15s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .signup-btn:hover {
+            transform: translateY(-1px);
+            background: linear-gradient(135deg, #4f46e5, #6366f1);
+        }
+    </style>
+</head>
+
+<body class="style-1">
+
+    <!-- Profile Modal -->
+    <div id="profileModal"
+        style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.35);z-index:10001;align-items:center;justify-content:center;backdrop-filter:blur(6px);">
+        <div
+            style="background:#fff;border-radius:18px;box-shadow:0 24px 60px rgba(15,23,42,0.35);padding:32px 30px 26px 30px;min-width:320px;max-width:92vw;text-align:center;position:relative;">
+            <h3 style="margin-bottom:18px;font-size:1.3rem;color:#111827;font-weight:600;">Profile</h3>
+            <div id="profileInfo" style="font-size:1rem;color:#222;margin-bottom:18px;text-align:left;"></div>
+            <button onclick="document.getElementById('profileModal').style.display='none'"
+                style="padding:8px 22px;background:#6366f1;color:#fff;border:none;border-radius:7px;font-weight:600;cursor:pointer;">Close</button>
+        </div>
+    </div>
+
+    <!-- Signup Modal -->
+    <div id="signupModal" onclick="if(event.target===this) this.style.display='none'">
+        <div class="modal-card">
+            <div class="modal-icon"><i class="fa-solid fa-user-plus"></i></div>
+            <h3>Sign in to continue</h3>
+            <p>Please log in to access your account.</p>
+            <button id="googleSignup" class="signup-btn">
+                <i class="fa-brands fa-google"></i> Continue with Google
+            </button>
+        </div>
+    </div>
+
+    <!-- Mobile Menu Button -->
+    <button class="mobile-menu-btn" id="mobileMenuBtn" onclick="toggleMobileMenu()">
+        <i class="fa-solid fa-bars"></i>
+    </button>
+
+    <!-- Mobile Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeMobileMenu()"></div>
+
+    <div class="app-root">
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="logo-text" style="margin-bottom: 2rem;">
+                <a href="https://mlopssol.com/" target="_blank">
+                    <img src="/static/logo.png" alt="Logo" style="height:48px;max-width:180px;vertical-align:middle;">
+                </a>
+            </div>
+
+            <div>
+                <div class="nav-section-title">Workspace</div>
+                <ul>
+                    <li><a href="/"><i class="fa-solid fa-wave-square"></i><span>Speech to Text</span></a></li>
+                    <li><a href="/multi-video-transcription"><i class="fa-solid fa-list-check"></i><span>Batch
+                                Transcription</span></a></li>
+                </ul>
+            </div>
+
+            <div>
+                <div class="nav-section-title">Discover MLOps</div>
+                <ul>
+                    <li><a href="https://www.mlopssol.com" target="_blank"><i class="fa-solid fa-rocket"
+                                style="color:#818cf8;"></i><span>Official Website</span></a></li>
+                </ul>
+            </div>
+
+            <div>
+                <div class="nav-section-title">Support</div>
+                <ul>
+                    <li><a href="/contact" class="active"><i class="fa-solid fa-envelope"
+                                style="color:#f472b6;"></i><span>Contact</span></a></li>
+                </ul>
+            </div>
+
+            <div>
+                <div class="nav-section-title">Account</div>
+                <ul>
+                    <li><a href="#" id="sidebarProfile"><i class="fa-solid fa-user"></i><span>Profile</span></a></li>
+                    <li><a href="/billing"><i class="fa-solid fa-credit-card"></i><span>Billing</span></a></li>
+                    <li><a href="#" id="sidebarAuth"><i class="fa-solid fa-arrow-right-to-bracket"></i><span>Sign
+                                in</span></a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- MAIN PANEL -->
+        <div class="main-panel">
+            <!-- TOP BAR -->
+            <header class="topbar">
+                <div style="display:flex;align-items:center;gap:.7rem;">
+                    <span class="badge-soft">Support</span>
+                    <span style="font-size:.82rem;color:#6b7280;">Contact Us</span>
+                </div>
+
+                <div class="topbar-right" id="profileBar">
+                    <span id="welcomeName">Guest</span>
+                    <i class="fa-solid fa-user-circle" style="font-size:1.4rem;color:#6366f1;"></i>
+                </div>
+            </header>
+
+            <!-- MAIN CONTENT -->
+            <main class="page-content">
+
+                <div class="contact-container">
+                    <div class="contact-header">
+                        <h1>Get in Touch</h1>
+                        <p>We'd love to hear from you. Send us a message and we'll respond as soon as possible.</p>
+                    </div>
+
+                    <div class="success-message" id="successMessage">
+                        <i class="fa-solid fa-circle-check"></i> Your message has been sent successfully!
+                    </div>
+
+                    <div class="error-message" id="errorMessage">
+                        <i class="fa-solid fa-circle-exclamation"></i> Something went wrong. Please try again.
+                    </div>
+
+                    <form id="contactForm" onsubmit="submitForm(event)">
+                        <div class="form-group">
+                            <label class="form-label" for="name">Name</label>
+                            <input type="text" id="name" name="name" class="form-control" placeholder="Your Name"
+                                required>
+                        </div>
+
+                        <!-- class="form-group">
+                            <label class="form-label" for="email">Email Address</label>
+                            <input type="email" id="email" name="email" class="form-control"
+                                placeholder="you@example.com" required>
+                        </div>-->
+
+                        <div class="form-group">
+                            <label class="form-label" for="subject">Subject</label>
+                            <input type="text" id="subject" name="subject" class="form-control"
+                                placeholder="How can we help?" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="message">Message</label>
+                            <textarea id="message" name="message" class="form-control"
+                                placeholder="Describe your inquiry..." required></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="attachment">Attachment (Image)</label>
+                            <input type="file" id="attachment" name="attachment" class="form-control" accept="image/*">
+                        </div>
+
+                        <button type="submit" class="submit-btn" id="submitBtn">
+                            <span id="btnText">Send Message</span>
+                            <i class="fa-solid fa-paper-plane" style="margin-left: 8px;"></i>
+                        </button>
+                    </form>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <script>
+        function toggleMobileMenu() {
+            const sidebar = document.querySelector('.sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            sidebar.classList.toggle('mobile-open');
+            overlay.classList.toggle('active');
+        }
+
+        function closeMobileMenu() {
+            const sidebar = document.querySelector('.sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            sidebar.classList.remove('mobile-open');
+            overlay.classList.remove('active');
+        }
+
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+            return null;
+        }
+
+        async function submitForm(event) {
+            event.preventDefault();
+
+            // Check if logged in
+            const loggedIn = getCookie("loggedIn") === "true";
+            if (!loggedIn) {
+                showSignupModal();
+                return;
+            }
+
+            const btn = document.getElementById('submitBtn');
+            const btnText = document.getElementById('btnText');
+            const successMsg = document.getElementById('successMessage');
+            const errorMsg = document.getElementById('errorMessage');
+
+            const formData = new FormData();
+            formData.append('name', document.getElementById('name').value);
+
+            let email = "";
+            const emailInput = document.getElementById('email');
+            if (emailInput) {
+                email = emailInput.value;
+            } else {
+                email = decodeURIComponent(getCookie("email") || '');
+            }
+            formData.append('email', email);
+
+            formData.append('subject', document.getElementById('subject').value);
+            formData.append('message', document.getElementById('message').value);
+
+            const fileInput = document.getElementById('attachment');
+            if (fileInput.files.length > 0) {
+                formData.append('attachment', fileInput.files[0]);
+            }
+
+            successMsg.style.display = 'none';
+            errorMsg.style.display = 'none';
+
+            btn.disabled = true;
+            btnText.textContent = "Sending...";
+
+            try {
+                const response = await fetch('/api/contact', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    successMsg.style.display = 'block';
+                    document.getElementById('contactForm').reset();
+                    updateSidebarAuth();
+                } else {
+                    throw new Error('Server error');
+                }
+            } catch (err) {
+                console.error(err);
+                errorMsg.style.display = 'block';
+            } finally {
+                btn.disabled = false;
+                btnText.textContent = "Send Message";
+            }
+        }
+
+        function showSignupModal() {
+            document.getElementById('signupModal').style.display = 'flex';
+        }
+
+        function updateSidebarAuth() {
+            const authText = document.getElementById('sidebarAuth').querySelector('span');
+            const authBtn = document.getElementById('sidebarAuth');
+            const authIcon = document.getElementById('sidebarAuth').querySelector('i');
+            const profileBar = document.getElementById('profileBar');
+            const welcomeName = document.getElementById('welcomeName');
+
+            const loggedIn = getCookie("loggedIn") === "true";
+            const name = getCookie("name");
+
+            if (loggedIn) {
+                // LOGOUT STATE
+                authText.textContent = 'Logout';
+                if (authIcon) {
+                    authIcon.classList.remove('fa-arrow-right-to-bracket');
+                    authIcon.classList.add('fa-arrow-right-from-bracket');
+                }
+                authBtn.onclick = (e) => {
+                    e.preventDefault();
+                    closeMobileMenu();
+                    const cookies = ["loggedIn", "email", "name", "subscribed", "free_trial_used"];
+                    cookies.forEach(c => {
+                        document.cookie = `${c}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+                    });
+                    window.location.href = "/";
+                };
+
+                if (profileBar) profileBar.style.display = 'flex';
+                if (welcomeName) welcomeName.textContent = `Welcome, ${decodeURIComponent(name || 'User')}`;
+
+                // Pre-fill form
+                const nameInput = document.getElementById('name');
+                const emailInput = document.getElementById('email');
+                if (nameInput && !nameInput.value) nameInput.value = decodeURIComponent(name || '');
+                if (emailInput && !emailInput.value) emailInput.value = decodeURIComponent(getCookie("email") || '');
+
+                // Profile Button Logic
+                const profileBtn = document.getElementById('sidebarProfile');
+                if (profileBtn) {
+                    profileBtn.onclick = (e) => {
+                        e.preventDefault();
+                        closeMobileMenu();
+                        const email = decodeURIComponent(getCookie("email") || "N/A");
+                        const subStatus = getCookie("subscribed") === "1" ? "Pro Plan" : "Free Plan";
+                        const pName = decodeURIComponent(getCookie("name") || "User");
+
+                        const infoHtml = `
+                           <p><strong>Name:</strong> ${pName}</p>
+                           <p><strong>Email:</strong> ${email}</p>
+                           <p><strong>Status:</strong> <span style="color:${getCookie("subscribed") === "1" ? "#10b981" : "#6b7280"};font-weight:600;">${subStatus}</span></p>
+                       `;
+                        document.getElementById('profileInfo').innerHTML = infoHtml;
+                        document.getElementById('profileModal').style.display = 'flex';
+                    }
+                }
+
+            } else {
+                // LOGIN STATE
+                authText.textContent = 'Sign in';
+                if (authIcon) {
+                    authIcon.classList.remove('fa-arrow-right-from-bracket');
+                    authIcon.classList.add('fa-arrow-right-to-bracket');
+                }
+                authBtn.onclick = (e) => {
+                    e.preventDefault();
+                    closeMobileMenu();
+                    showSignupModal();
+                };
+
+                if (profileBar) profileBar.style.display = 'none';
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            updateSidebarAuth();
+
+            // Hook up google signup button
+            const googleBtn = document.getElementById('googleSignup');
+            if (googleBtn) {
+                googleBtn.onclick = () => {
+                    window.location.href = "/login/google";
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
