@@ -2,8 +2,8 @@ import requests
 import logging
 
 # Llama API Configuration
-MAIN_LLAMA_URL = "http://97.99.18.159:11434/api/generate"
-BACKUP_LLAMA_URL = "http://97.99.18.159:11435/api/generate"
+MAIN_LLAMA_URL = ""
+BACKUP_LLAMA_URL = ""
 # Model verified from tags: llama3.1:8b-instruct-q4_K_M
 LLAMA_MODEL = "llama3.1:8b-instruct-q4_K_M"
 
